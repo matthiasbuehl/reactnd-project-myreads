@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import escapeRegExp from 'escape-string-regexp'
 import Book from './Book'
 
@@ -20,7 +20,7 @@ class Search extends React.Component {
   }
 
   render() {
-    const { books, handleSearch, handleShelfChange } = this.props
+    const { books, handleShelfChange } = this.props
     const { searchTerm } = this.state
     const bookResults = this.filterBooks(books, searchTerm)
 
