@@ -36,7 +36,6 @@ class BooksApp extends React.Component {
 
   getBooks() {
     BooksAPI.getAll().then((books) => {
-      console.log('getting books', books)
       this.setState({ books })
     })
   }
@@ -47,7 +46,6 @@ class BooksApp extends React.Component {
 
   handleShelfChange = (book, newShelf) => {
     BooksAPI.update(book, newShelf).then(res => {
-      console.log('response', res)
       this.getBooks()
     }).catch(error => {
       console.log('error', error)

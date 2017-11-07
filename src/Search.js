@@ -13,6 +13,8 @@ class Search extends React.Component {
   }
 
   filterBooks(books, searchTerm) {
+    if (! searchTerm) return []
+
     const match = new RegExp(escapeRegExp(searchTerm), 'i')
     return books.filter(book => match.test(book.title) )
   }
