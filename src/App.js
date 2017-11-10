@@ -4,11 +4,9 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 import Bookshelf from './Bookshelf'
 import Search from './Search'
+import AppWrapper from './AppWrapper'
 
 class BooksApp extends React.Component {
-  state = {
-    books: []
-  }
   bookshelves = [
     {
       key: 'currentlyReading',
@@ -23,6 +21,10 @@ class BooksApp extends React.Component {
       display: 'Read'
     }
   ]
+
+  state = {
+    books: []
+  }
 
   booksByShelf(shelf) {
     return this.state.books.filter(book => book.shelf === shelf )
@@ -51,39 +53,11 @@ class BooksApp extends React.Component {
 
   render() {
     return (
-      <div className="app">
-        <Switch>
-          <Route path='/search' render={() => (
-            <Search
-              books={ this.state.books }
-              handleShelfChange={ this.handleShelfChange }
-            />
-          )}/>
-          <Route exact path='/' render={() => (
-            <div className="list-books">
-              <div className="list-books-title">
-                <h1>MyReads</h1>
-              </div>
-              <div className="list-books-content">
-                {this.bookshelves.map(bs =>
-                  <Bookshelf
-                    key={ bs.key }
-                    name={ bs.display }
-                    books={ this.booksByShelf(bs.key) }
-                    handleShelfChange={ this.handleShelfChange }
-                  />
-                )}
-              </div>
-              <div className="open-search">
-                <Link to="/search">Search</Link>
-              </div>
-            </div>
-          )}/>
-          <Route render={() => (
-            <div>bad route</div>
-          )}/>
-        </Switch>
-      </div>
+      <AppWrapper
+        bookshelves={ this.bookshelves }
+        books={ this.state.books }
+        handleShelfChange={ this.handleShelfChange }
+      />
     )
   }
 }
