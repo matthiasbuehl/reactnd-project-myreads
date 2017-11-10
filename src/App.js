@@ -1,10 +1,10 @@
 import React from 'react'
-import { Route, Link, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import Bookshelf from './Bookshelf'
 import Search from './Search'
-import AppWrapper from './AppWrapper'
+import BookList from './BookList'
+import Error404 from './Error404'
 
 class BooksApp extends React.Component {
   bookshelves = [
@@ -53,11 +53,24 @@ class BooksApp extends React.Component {
 
   render() {
     return (
-      <AppWrapper
-        bookshelves={ this.bookshelves }
-        books={ this.state.books }
-        handleShelfChange={ this.handleShelfChange }
-      />
+      <div className="app">
+        <Switch>
+          <Route path='/search' render={() => (
+            <Search
+              books={ this.state.books }
+              handleShelfChange={ this.handleShelfChange }
+            />
+          )}/>
+          <Route exact path='/' render={() => (
+            <BookList
+              bookshelves={ this.bookshelves }
+              books={ this.state.books }
+              handleShelfChange={ this.handleShelfChange }
+            />
+          )}/>
+          <Route component={ Error404 }/>
+        </Switch>
+    </div>
     )
   }
 }

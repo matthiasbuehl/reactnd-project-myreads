@@ -10,7 +10,7 @@ class Bookshelf extends React.Component {
         <h2 className="bookshelf-title">{ name }</h2>
         <BookshelfRow
           books={ this.props.books }
-          handleShelfChange= { handleShelfChange }
+          handleShelfChange={ handleShelfChange }
         />
       </div>
     )

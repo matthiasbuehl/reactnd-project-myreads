@@ -172,3 +172,12 @@ body, .app {
   text-align: center;
   font-size: 0.8em;
 }
+
+/* error page */
+.error {
+  margin: 100px auto;
+  width: 50%;
+  border: 3px solid red;
+  padding: 10px;
+  text-align: center;
+}
