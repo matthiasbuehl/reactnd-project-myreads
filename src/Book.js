@@ -3,7 +3,7 @@ import React from 'react'
 class Book extends React.Component {
   render() {
     const { book, handleShelfChange } = this.props
-    const { title, author, imageLinks, shelf } = book
+    const { title, authors, imageLinks, shelf } = book
 
     return (
       <div className="book">
@@ -12,7 +12,7 @@ class Book extends React.Component {
           className="book-cover" style={{
           width: 128,
           height: 193,
-          backgroundImage: `url(${imageLinks["thumbnail"]}`
+          backgroundImage: imageLinks && `url(${imageLinks["thumbnail"]}`
         }}></div>
         <div className="book-shelf-changer">
           <select value={ shelf || 'none' } onChange={ e => handleShelfChange(book, e.target.value) }>
@@ -25,7 +25,7 @@ class Book extends React.Component {
         </div>
       </div>
       <div className="book-title">{ title }</div>
-      <div className="book-authors">{ author }</div>
+      <div className="book-authors">{ authors }</div>
     </div>
     )
   }
