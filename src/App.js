@@ -33,10 +33,11 @@ class BooksApp extends React.Component {
   handleShelfChange = (book, newShelf) => {
     BooksAPI.update(book, newShelf).then(res => {
       book.shelf = newShelf
-      this.setState(prevState => ({
-          books: prevState.books.filter(pb => pb.id !== book.id).concat([book])
-        })
-      )
+      let updatedBooks = this.state.books.filter(pb => pb.id !== book.id)
+      return this.setState({
+        // If the new shelf is 'none' remove the book from state
+        books: newShelf === 'none' ? updatedBooks : updatedBooks.concat([book])
+      })
     }).catch(error => {
       console.log('error', error)
     })
