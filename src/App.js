@@ -32,11 +32,11 @@ class BooksApp extends React.Component {
 
   handleShelfChange = (book, newShelf) => {
     BooksAPI.update(book, newShelf).then(res => {
-      book.shelf = newShelf
+      book.shelf = newShelf === 'remove' ? 'none' : newShelf
       let updatedBooks = this.state.books.filter(pb => pb.id !== book.id)
       return this.setState({
         // If the new shelf is 'none' remove the book from state
-        books: newShelf === 'none' ? updatedBooks : updatedBooks.concat([book])
+        books: newShelf === 'remove' ? updatedBooks : updatedBooks.concat([book])
       })
     }).catch(error => {
       console.log('error', error)
@@ -52,11 +52,13 @@ class BooksApp extends React.Component {
   }
 
   render() {
+    const { books } = this.state
     return (
       <div className="app">
         <Switch>
           <Route path='/search' render={() => (
             <Search
+              books={ books }
               handleShelfChange={ this.handleShelfChange }
               handleSearch={ this.handleSearch }
             />
@@ -64,7 +66,7 @@ class BooksApp extends React.Component {
           <Route exact path='/' render={() => (
             <BookList
               bookshelves={ this.bookshelves }
-              books={ this.state.books }
+              books={ books }
               handleShelfChange={ this.handleShelfChange }
             />
           )}/>

@@ -15,10 +15,22 @@ class Search extends React.Component {
 
     const maxResults = 100
     BooksAPI.search(searchTerm, maxResults).then(books => {
-      this.setState({ results: Array.isArray(books) ? books : [] })
+      this.setState({ results: Array.isArray(books) ? this.syncResultsWithBookshelf(books) : [] })
     }).catch(error => {
       console.log('search failed', error)
       this.setState({ results: [] })
+    })
+  }
+
+  syncResultsWithBookshelf = (resultBooks) => {
+    const { books } = this.props
+    return resultBooks.map(rb => {
+      rb.shelf = ''
+      const bookMatch = books.filter(b => b.id === rb.id)
+      if (bookMatch.length > 0) {
+        rb.shelf = bookMatch[0].shelf
+      }
+      return rb
     })
   }
 
