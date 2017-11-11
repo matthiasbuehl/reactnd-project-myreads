@@ -30,24 +30,23 @@ class BooksApp extends React.Component {
     return this.state.books.filter(book => book.shelf === shelf )
   }
 
-  getBooks() {
-    BooksAPI.getAll().then((books) => {
-      this.setState({ books })
+  handleShelfChange = (book, newShelf) => {
+    BooksAPI.update(book, newShelf).then(res => {
+      book.shelf = newShelf
+      this.setState(prevState => ({
+          books: prevState.books.filter(pb => pb.id !== book.id).concat([book])
+        })
+      )
+    }).catch(error => {
+      console.log('error', error)
     })
   }
 
   componentDidMount() {
-    this.getBooks()
-  }
-
-  handleShelfChange = (book, newShelf) => {
-    BooksAPI.update(book, newShelf).then(res => {
-      book.shelf = newShelf
-      this.setState(prevState => {
-        books: prevState.books.filter(pb => pb.id !== book.id).concat([book])
-      })
+    BooksAPI.getAll().then((books) => {
+      this.setState({ books })
     }).catch(error => {
-      console.log('error', error)
+      console.log('error getting all books', error)
     })
   }
 
@@ -57,8 +56,8 @@ class BooksApp extends React.Component {
         <Switch>
           <Route path='/search' render={() => (
             <Search
-              books={ this.state.books }
               handleShelfChange={ this.handleShelfChange }
+              handleSearch={ this.handleSearch }
             />
           )}/>
           <Route exact path='/' render={() => (

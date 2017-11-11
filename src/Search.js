@@ -1,28 +1,29 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp'
 import Book from './Book'
+import * as BooksAPI from './BooksAPI'
 
 class Search extends React.Component {
   state = {
-    searchTerm: ''
+    searchTerm: '',
+    results: []
   }
 
-  handleSearch(books, searchTerm) {
-    this.setState( {searchTerm: searchTerm.trim()} )
-  }
+  handleSearch(searchTerm) {
+    this.setState( { searchTerm: searchTerm } )
+    if (!searchTerm) this.setState({ results: [] })
 
-  filterBooks(books, searchTerm) {
-    if (! searchTerm) return []
-
-    const match = new RegExp(escapeRegExp(searchTerm), 'i')
-    return books.filter(book => match.test(book.title) )
+    const maxResults = 100
+    BooksAPI.search(searchTerm, maxResults).then(resp => {
+      this.setState({ results: resp })
+    }).catch(error => {
+      console.log('search failed', error)
+      this.setState({ results: [] })
+    })
   }
 
   render() {
-    const { books, handleShelfChange } = this.props
-    const { searchTerm } = this.state
-    const bookResults = this.filterBooks(books, searchTerm)
+    const { handleShelfChange } = this.props
 
     return (
       <div className="search-books">
@@ -43,15 +44,16 @@ class Search extends React.Component {
           */}
           <input
             type="text"
+            value={ this.state.searchTerm }
             placeholder="Search by title or author"
-            onChange={e => this.handleSearch(books, e.target.value) }
+            onChange={ e => this.handleSearch(e.target.value) }
            />
 
         </div>
       </div>
       <div className="search-books-results">
         <ol className="books-grid">
-          { bookResults.map(book =>
+          { this.state.results.map(book =>
             <li key={ book.id }>
               <Book
                 book={ book }
